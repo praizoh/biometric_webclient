@@ -69,7 +69,7 @@ function getEnrollments(){
         },
         complete: function(jqXHR) {
             if (jqXHR.status != '200') {                
-                window.location.replace("dashboard.html");
+                window.location.replace("index.html");
             }
         }
     };
