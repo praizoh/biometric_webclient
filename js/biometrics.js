@@ -26,7 +26,7 @@ function getEnrollments(){
     var view_data = new ViewData();
 
     var settings = {
-        "url": `http://192.168.56.1:3333/enrollment?isEnrolled=true`,
+        "url": `https://biometrics-app.herokuapp.com/enrollment?isEnrolled=true`,
         "method": "GET",
         "timeout": 0,
         "headers": {
