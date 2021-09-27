@@ -22,21 +22,22 @@ var table = $('#dataTable').DataTable( {
 
 
 var view_data = new ViewData();
-getEnrollments()
-// getAttendance()
-function getEnrollments(){
+getAttendance()
+
+function getAttendance(){
     var view_data = new ViewData();
 
     var settings = {
-        "url": `https://biometrics-app.herokuapp.com/enrollment?isEnrolled=true`,
+        "url": `https://biometrics-app.herokuapp.com/attendance`,
         "method": "GET",
         "timeout": 0,
         "headers": {
         "Content-Type": "application/json"
         },
         success: function(data) {
+            console.log(data)
             Snackbar.show({
-                text: `Enrollments fetched`,
+                text: `Attendance fetched`,
                 actionTextColor: '#fff',
                 backgroundColor: '#1cc88a',
                 pos: 'top-right'
@@ -46,15 +47,27 @@ function getEnrollments(){
             var result = data.data
             console.log(result)
             for(i = 0; i<result.length; i++){
-                let dateTime =  result[i]['feature_creation_date']
-                dateTime = moment(dateTime).format('MMMM Do YYYY, h:mm:ss a')
-                result[i]['feature_creation_date'] =  dateTime
+                let clocker =  result[i]['clock_in']
+                clockIn = moment(result[i]['clock_in']).format('h:mm:ss a')
+                result[i]['clock_in'] =  clockIn
+                result[i]['attendanceDay'] = moment(clocker).format('MMMM Do YYYY')
+
+                let clockOut =  result[i]['clock_out']
+                if(clockOut){
+                    clockOut = moment(clockOut).format('h:mm:ss a')
+                    result[i]['clock_out'] =  clockOut
+                }else{
+                    result[i]['clock_out'] =  "--:--"
+                }
+                
+
                 table.row.add( [
-                    result[i]['id'],
                     result[i]['name'],
                     result[i]['employee_id'],
                     result[i]['phone_number'],
-                    result[i]['feature_creation_date']
+                    result[i]['attendanceDay'],
+                    result[i]['clock_in'],
+                    result[i]['clock_out']
                 ] ).draw( false );
             }
             
@@ -79,65 +92,3 @@ function getEnrollments(){
     $.ajax(settings).done(function (response) {
     });
 }
-// function getAttendance(){
-//     var view_data = new ViewData();
-
-//     var settings = {
-//         "url": `https://biometrics-app.herokuapp.com/attendance`,
-//         "method": "GET",
-//         "timeout": 0,
-//         "headers": {
-//         "Content-Type": "application/json"
-//         },
-//         success: function(data) {
-//             Snackbar.show({
-//                 text: `Attendance fetched`,
-//                 actionTextColor: '#fff',
-//                 backgroundColor: '#1cc88a',
-//                 pos: 'top-right'
-//             }); 
-//             table.clear().draw();
-            
-//             var result = data.data
-//             console.log(result)
-//             for(i = 0; i<result.length; i++){
-//                 let clockIn =  result[i]['clock_in']
-//                 clockIn = moment(clockIn).format('h:mm:ss a')
-//                 result[i]['clock_in'] =  clockIn
-//                 result[i]['attendanceDay'] = moment(clockIn).format('MMMM Do YYYY')
-
-//                 let clockOut =  result[i]['clock_out']
-//                 clockOut = moment(clockOut).format('h:mm:ss a')
-//                 result[i]['clock_out'] =  clockOut
-
-//                 table.row.add( [
-//                     result[i]['name'],
-//                     result[i]['employee_id'],
-//                     result[i]['phone_number'],
-//                     result[i]['attendanceDay'],
-//                     result[i]['clock_in'],
-//                     result[i]['clock_out']
-//                 ] ).draw( false );
-//             }
-            
-
-           
-//         },
-//         error: function(data){
-//             Snackbar.show({
-//                 text: `${data["responseJSON"]["message"]}`,
-//                 actionTextColor: '#fff',
-//                 backgroundColor: '#e7515a',
-//                 pos: 'top-right'
-//             }); 
-//         },
-//         complete: function(jqXHR) {
-//             if (jqXHR.status != '200') {                
-//                 // window.location.replace("index.html");
-//             }
-//         }
-//     };
-
-//     $.ajax(settings).done(function (response) {
-//     });
-// }
