@@ -17,8 +17,10 @@ var table = $('#dataTable').DataTable( {
     },
     "stripeClasses": [],
     "lengthMenu": [7, 10, 20, 50],
-    "pageLength": 7 
+    "pageLength": 7 ,
+    
 } );
+table.order( [ 3, 'desc' ] ).draw();
 
 
 var view_data = new ViewData();

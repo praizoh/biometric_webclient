@@ -20,7 +20,7 @@ var table = $('#dataTable').DataTable( {
     "pageLength": 7 
 } );
 
-
+table.order( [ 4, 'desc' ] ).draw();
 var view_data = new ViewData();
 getEnrollments()
 // getAttendance()
